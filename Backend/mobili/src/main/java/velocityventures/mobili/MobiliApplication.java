@@ -9,5 +9,4 @@ public class MobiliApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MobiliApplication.class, args);
 	}
-
 }

@@ -1,7 +1,7 @@
 package velocityventures.mobili.entity;
 
 import java.time.LocalDateTime;
-
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,8 +10,12 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import velocityventures.mobili.entity.enums.Role;
+
 
 @Entity
 @Table(name = "users")
@@ -52,6 +56,10 @@ public class User {
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
 
+    @OneToMany(mappedBy = "user")
+    private List<DriverApplication> driverapplication;
+    
+    
     public User() {
     }
 
@@ -185,6 +193,25 @@ public class User {
 
     public void setLastLogin(LocalDateTime lastLogin) {
         this.lastLogin = lastLogin;
+    }
+
+
+
+    public User(Long id, String username, String email, String passwordHash, Role role, String phoneNumber,
+            String profileImage, Boolean isActive, Boolean profileCompleted, LocalDateTime createdAt,
+            LocalDateTime lastLogin, List<DriverApplication> driverapplication) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.role = role;
+        this.phoneNumber = phoneNumber;
+        this.profileImage = profileImage;
+        this.isActive = isActive;
+        this.profileCompleted = profileCompleted;
+        this.createdAt = createdAt;
+        this.lastLogin = lastLogin;
+        this.driverapplication = driverapplication;
     }
 
 }

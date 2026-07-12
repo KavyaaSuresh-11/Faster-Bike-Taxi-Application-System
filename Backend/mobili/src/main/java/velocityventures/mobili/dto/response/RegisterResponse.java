@@ -1,25 +1,34 @@
-package velocityventures.mobili.dto.request;
+package velocityventures.mobili.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Builder
 @AllArgsConstructor
 @Getter
 @Setter
-public class RegisterRequest {
-    private String username;
+public class RegisterResponse {
 
-    private String password;
+    private Long id;
+
+    private String username;
 
     private String email;
 
-    private String phoneNumber; 
+    private String phoneNumber;
+    public RegisterResponse(){
 
-    public RegisterRequest() {
+    }
+    public RegisterResponse( String username, String email, String phoneNumber) {
+        this.username = username;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getUsername() {
@@ -28,14 +37,6 @@ public class RegisterRequest {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword(){
-        return password;
-    }
-
-    public void setPassword(String password){
-        this.password=password;
     }
 
     public String getEmail() {
@@ -52,6 +53,5 @@ public class RegisterRequest {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-    
+    }     
 }
