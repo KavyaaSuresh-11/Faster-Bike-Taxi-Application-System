@@ -1,12 +1,7 @@
 package velocityventures.mobili.dto.request;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
-import org.springframework.cglib.core.Local;
-
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.Builder;
 import velocityventures.mobili.entity.DriverApplication;
 import velocityventures.mobili.entity.enums.Document_type;
@@ -15,7 +10,6 @@ import velocityventures.mobili.entity.enums.Document_type;
 public class DocumentRequest {
     private Long id;
 
-    @Enumerated(EnumType.STRING)
     private Document_type documentType;
 
     private String documentNumber;

@@ -2,16 +2,12 @@ package velocityventures.mobili.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import javax.management.RuntimeErrorException;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import lombok.Builder;
-// import velocityventures.mobili.config.JwtUtil;
 import velocityventures.mobili.dto.request.LoginRequest;
 import velocityventures.mobili.dto.request.RegisterRequest;
 import velocityventures.mobili.dto.response.RegisterResponse;
@@ -23,22 +19,15 @@ import velocityventures.mobili.service.UserService;
 @Service
 public class UserServiceImpl implements UserService {
    private final userRepository userRepo;
-   private final PasswordEncoder passwordEncoder;
-//    private final JwtUtil jwtUtil;
 
- public UserServiceImpl(userRepository userRepo, PasswordEncoder passwordEncoder){
-    // public UserServiceImpl(userRepository userRepo, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+   public UserServiceImpl(userRepository userRepo) {
         this.userRepo = userRepo;
-        this.passwordEncoder=passwordEncoder;
-        // this.jwtUtil=jwtUtil;
     }
 
 
 @Override
 public RegisterResponse register(RegisterRequest request) {
 
-    System.out.println("Checking email...");
-System.out.println(userRepo.existsByEmail(request.getEmail()));
     if (userRepo.existsByEmail(request.getEmail())) {
         throw new RuntimeException("Duplicate Email");
     }
@@ -53,7 +42,7 @@ System.out.println(userRepo.existsByEmail(request.getEmail()));
     User user = new User();
     user.setUsername(request.getUsername());
     user.setEmail(request.getEmail());
-    user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+    user.setPasswordHash(request.getPassword());
     user.setPhoneNumber(request.getPhoneNumber());
     user.setRole(Role.DRIVER);
     user.setIsActive(true);
@@ -78,7 +67,7 @@ public List<User> getAllDrivers(){
 
 @Override
 public User getById(Long id){
-    User user = userRepo.findById(id).get();
+    User user = userRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
     return user;
 }
 
@@ -87,7 +76,7 @@ public User updateUser(Long id, User update){
     User existing = userRepo.findById(id).orElseThrow(()->new RuntimeException("User not found"));
     existing.setUsername(update.getUsername());
     existing.setEmail(update.getEmail());
-    existing.setPasswordHash(passwordEncoder.encode(update.getPasswordHash()));
+    existing.setPasswordHash(update.getPasswordHash());
     existing.setPhoneNumber(update.getPhoneNumber());
     return userRepo.save(existing);
 }
@@ -99,15 +88,23 @@ public void deleteUser(Long id){
         throw new RuntimeException("User not found");
     }
     userRepo.deleteById(id);
-}
+}@Override
+public String login(LoginRequest request) {
 
-@Override
-public String login(LoginRequest request){
-    User user = userRepo.findByEmail(request.getEmail()).orElseThrow(()->new RuntimeException("User not found!"));
-    if(!passwordEncoder.matches(request.getPassword(),user.getPasswordHash())){
+    System.out.println("Request Email: '" + request.getEmail() + "'");
+
+    Optional<User> optionalUser = userRepo.findByEmail(request.getEmail());
+
+    System.out.println("User Found: " + optionalUser.isPresent());
+
+    User user = optionalUser.orElseThrow(() -> new RuntimeException("User not found!"));
+
+    System.out.println("DB Email: " + user.getEmail());
+
+    if (!user.getPasswordHash().equals(request.getPassword())) {
         throw new RuntimeException("Invalid password!");
     }
-    return "Successful";
-    // return jwtUtil.generateToken(user.getEmail());
+
+    return "Login Successful";
 }
 }

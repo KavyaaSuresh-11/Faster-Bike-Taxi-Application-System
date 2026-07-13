@@ -11,9 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.Builder;
 import velocityventures.mobili.entity.enums.Role;
 
 
@@ -178,11 +176,9 @@ public class User {
     }
 
 
-
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
-
 
 
     public LocalDateTime getLastLogin() {
@@ -194,8 +190,6 @@ public class User {
     public void setLastLogin(LocalDateTime lastLogin) {
         this.lastLogin = lastLogin;
     }
-
-
 
     public User(Long id, String username, String email, String passwordHash, Role role, String phoneNumber,
             String profileImage, Boolean isActive, Boolean profileCompleted, LocalDateTime createdAt,

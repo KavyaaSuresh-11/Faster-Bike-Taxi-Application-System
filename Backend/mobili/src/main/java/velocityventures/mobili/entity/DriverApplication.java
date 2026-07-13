@@ -1,11 +1,9 @@
 package velocityventures.mobili.entity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.cglib.core.Local;
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -18,11 +16,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.Builder;
 import velocityventures.mobili.entity.enums.ApplicationStatus;
 
 @Entity
-@Builder
 @Table(name = "driver_application")
 public class DriverApplication {
     
@@ -52,6 +48,12 @@ public class DriverApplication {
 
     @OneToOne(mappedBy = "driverApplication")
     private Vehicle vehicle;
+
+    @OneToOne(mappedBy = "driverApplication",
+          cascade = CascadeType.ALL,
+          orphanRemoval = true)
+private BackgroundCheck backgroundCheck;
+
 
     public Long getApplicationId() {
         return applicationid;
@@ -103,9 +105,10 @@ public class DriverApplication {
 
     public DriverApplication() {
     }
-    
+
+    @lombok.Builder
     public DriverApplication(Long applicationid, ApplicationStatus status, String remarks, LocalDateTime submitted_at,
-            LocalDateTime updated_at, User user, List<Document> documents, Vehicle vehicle) {
+            LocalDateTime updated_at, User user, List<Document> documents, Vehicle vehicle, BackgroundCheck backgroundCheck) {
         this.applicationid = applicationid;
         this.status = status;
         this.remarks = remarks;
@@ -114,6 +117,7 @@ public class DriverApplication {
         this.user = user;
         this.documents = documents;
         this.vehicle = vehicle;
+        this.backgroundCheck = backgroundCheck;
     }
 
 }

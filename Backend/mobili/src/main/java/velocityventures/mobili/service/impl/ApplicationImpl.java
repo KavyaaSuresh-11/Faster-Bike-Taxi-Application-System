@@ -1,12 +1,9 @@
 package velocityventures.mobili.service.impl;
 
-import java.sql.Driver;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import velocityventures.mobili.dto.request.ApplicationRequest;
@@ -17,17 +14,22 @@ import velocityventures.mobili.entity.enums.ApplicationStatus;
 import velocityventures.mobili.repository.DriverApplicationRepository;
 import velocityventures.mobili.repository.userRepository;
 import velocityventures.mobili.service.ApplicationService;
+import velocityventures.mobili.service.NotificationService;
+import velocityventures.mobili.dto.request.NotificationRequest;
+import velocityventures.mobili.entity.enums.NotificationType;
 
 @Service
 public class ApplicationImpl implements ApplicationService {
     
     private DriverApplicationRepository appRepo;
     private userRepository userRepo;
+    private final NotificationService notificationService;
 
-    
-    public ApplicationImpl(DriverApplicationRepository appRepo, userRepository userRepo) {
+    public ApplicationImpl(DriverApplicationRepository appRepo, userRepository userRepo,
+            NotificationService notificationService) {
         this.appRepo = appRepo;
         this.userRepo = userRepo;
+        this.notificationService = notificationService;
     }
 
 @Override
@@ -114,6 +116,12 @@ public String approveApplication(Long id){
     DriverApplication application = appRepo.findById(id).orElseThrow(()-> new RuntimeException("Invalid data"));
     application.setStatus(ApplicationStatus.APPROVED);
     appRepo.save(application);
+    notificationService.sendNotification(NotificationRequest.builder()
+            .applicationId(application.getApplicationId())
+            .title("Application Approved")
+            .message("Congratulations! Your driver application has been approved.")
+            .notificationType(NotificationType.APPLICATION)
+            .build());
     return "Application approved!";
 }
 
@@ -123,6 +131,12 @@ public String rejectApplication(Long id){
     DriverApplication application = appRepo.findById(id).orElseThrow(()-> new RuntimeException("Invalid data"));
     application.setStatus(ApplicationStatus.REJECTED);
     appRepo.save(application);
+    notificationService.sendNotification(NotificationRequest.builder()
+            .applicationId(application.getApplicationId())
+            .title("Application Rejected")
+            .message("Your driver application has been rejected.")
+            .notificationType(NotificationType.APPLICATION)
+            .build());
     return "Application rejected!";
 }
 

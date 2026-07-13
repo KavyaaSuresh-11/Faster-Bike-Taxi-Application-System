@@ -8,7 +8,7 @@ public class VehicleRequest {
     private Long id;
     private String registrationNumber;
     private String vehicleType;
-    private String Brand;
+    private String brand;
     private String model;
     private String color;
     private String manufactureYear;
@@ -27,7 +27,7 @@ public class VehicleRequest {
         this.id = id;
         this.registrationNumber = registrationNumber;
         this.vehicleType = vehicleType;
-        Brand = brand;
+        this.brand = brand;
         this.model = model;
         this.color = color;
         this.manufactureYear = manufactureYear;
@@ -55,10 +55,10 @@ public class VehicleRequest {
         this.vehicleType = vehicleType;
     }
     public String getBrand() {
-        return Brand;
+        return brand;
     }
     public void setBrand(String brand) {
-        Brand = brand;
+        this.brand = brand;
     }
     public String getModel() {
         return model;

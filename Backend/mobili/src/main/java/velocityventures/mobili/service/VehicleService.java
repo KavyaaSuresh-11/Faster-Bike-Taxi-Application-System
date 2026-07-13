@@ -2,8 +2,6 @@ package velocityventures.mobili.service;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
-
 import velocityventures.mobili.dto.request.VehicleRequest;
 import velocityventures.mobili.dto.response.VehicleResponse;
 

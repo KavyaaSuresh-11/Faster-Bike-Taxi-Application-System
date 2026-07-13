@@ -3,11 +3,6 @@ package velocityventures.mobili.dto.response;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import org.w3c.dom.DocumentType;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.Builder;
 import velocityventures.mobili.entity.enums.Document_type;
 import velocityventures.mobili.entity.enums.VerificationStatus;
@@ -16,10 +11,8 @@ import velocityventures.mobili.entity.enums.VerificationStatus;
 public class DocumentResponse {
     private Long id;
 
-@Enumerated(EnumType.STRING)
 private Document_type documentType;
 
-@Column(nullable = false)
 private String documentNumber;
 
 private VerificationStatus verificationStatus;

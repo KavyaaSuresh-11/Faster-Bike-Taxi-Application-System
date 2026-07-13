@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import velocityventures.mobili.dto.request.DocumentRequest;
@@ -13,10 +12,13 @@ import velocityventures.mobili.dto.response.DocumentResponse;
 import velocityventures.mobili.entity.Document;
 import velocityventures.mobili.entity.DriverApplication;
 import velocityventures.mobili.entity.enums.Document_type;
+import velocityventures.mobili.entity.enums.NotificationType;
 import velocityventures.mobili.entity.enums.VerificationStatus;
 import velocityventures.mobili.repository.DocumentRepository;
 import velocityventures.mobili.repository.DriverApplicationRepository;
 import velocityventures.mobili.service.DocumentService;
+import velocityventures.mobili.service.NotificationService;
+import velocityventures.mobili.dto.request.NotificationRequest;
 
 @Service
 public class DocumentImpl implements DocumentService {
@@ -25,7 +27,9 @@ public class DocumentImpl implements DocumentService {
 
         @Autowired
         private DocumentRepository documentRepo;
-        
+
+        @Autowired
+        private NotificationService notificationService;
     
     @Override
     public DocumentResponse uploadDocument(DocumentRequest request){
@@ -116,6 +120,12 @@ public class DocumentImpl implements DocumentService {
         document.setVerificationStatus(VerificationStatus.APPROVED);
         document.setVerificationDate(LocalDateTime.now());
         documentRepo.save(document);
+        notificationService.sendNotification(NotificationRequest.builder()
+                .applicationId(document.getDriverApplication().getApplicationId())
+                .title("Document Approved")
+                .message("Your document has been approved successfully.")
+                .notificationType(NotificationType.DOCUMENT)
+                .build());
         return "Document approved successfully";
     }
      @Override
@@ -124,6 +134,12 @@ public class DocumentImpl implements DocumentService {
         document.setVerificationStatus(VerificationStatus.REJECTED);
         document.setVerificationDate(LocalDateTime.now());
         documentRepo.save(document);
+        notificationService.sendNotification(NotificationRequest.builder()
+                .applicationId(document.getDriverApplication().getApplicationId())
+                .title("Document Rejected")
+                .message("Your document has been rejected. Please upload it again.")
+                .notificationType(NotificationType.DOCUMENT)
+                .build());
         return "Document rejected";
     }
      @Override
@@ -132,6 +148,12 @@ public class DocumentImpl implements DocumentService {
         document.setVerificationStatus(VerificationStatus.WITH_HOLD);
         document.setVerificationDate(LocalDateTime.now());
         documentRepo.save(document);
+        notificationService.sendNotification(NotificationRequest.builder()
+                .applicationId(document.getDriverApplication().getApplicationId())
+                .title("Document Withheld")
+                .message("Your document verification has been put on hold.")
+                .notificationType(NotificationType.DOCUMENT)
+                .build());
         return "Document withheld";
     }
 }

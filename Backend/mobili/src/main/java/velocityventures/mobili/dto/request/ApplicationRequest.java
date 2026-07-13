@@ -1,9 +1,5 @@
 package velocityventures.mobili.dto.request;
 
-import org.springframework.boot.security.autoconfigure.SecurityProperties.User;
-
-import jakarta.persistence.Column;
-
 public class ApplicationRequest {
     
 

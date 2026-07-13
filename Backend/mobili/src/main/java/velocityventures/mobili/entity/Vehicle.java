@@ -16,12 +16,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.Builder;
 import velocityventures.mobili.entity.enums.VehicleConditions;
 import velocityventures.mobili.entity.enums.VehicleStatus;
 
 @Entity
-@Builder
 @Table(name = "vehicles")
 public class Vehicle {
     
@@ -193,6 +191,8 @@ public void setDriverApplication(DriverApplication driverApplication) {
 public Vehicle(){
 
 }
+
+@lombok.Builder
 public Vehicle(Long id, String registrationNumber, String vehicleType, String brand, String model, String color,
         String manufactureYear, String insurancePolicyNumber,String insuranceExpiry,
         String pollutionCertificateNumber, String pollutionExpiry, VehicleConditions vehicleConditions,

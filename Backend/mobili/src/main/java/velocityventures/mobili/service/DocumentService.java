@@ -2,8 +2,6 @@ package velocityventures.mobili.service;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.PathVariable;
-
 import velocityventures.mobili.dto.request.DocumentRequest;
 import velocityventures.mobili.dto.response.DocumentResponse;
 
